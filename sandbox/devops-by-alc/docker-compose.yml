@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./userManager:/usr/src/user-manager
+      - /usr/src/user-manager/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: "3000"
+      DB_URL: "mongodb://mongodb:27017/user_manager_dev_db"
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+
+  mongodb:
+    build:
+      context: .
+      dockerfile: Dockerfile.mongodb
+    ports:
+      - "27017:27017"
+      - "28017:28017"

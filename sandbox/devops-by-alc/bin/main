@@ -1,0 +1,45 @@
+#!/bin/bash
+
+echo '@Building MongoDB Image...'
+echo ''
+docker build -f Dockerfile.mongodb --tag docker/mongodb .
+
+echo '@Running MongoDB Image...'
+echo ''
+docker run --detach --publish 27017:27017 --name mongoDB docker/mongodb
+
+if [ ! -f "userManager/.env" ] ; then
+	echo '@Configuring ENV file...'
+	echo ''
+
+	touch userManager/.env
+
+	echo "PORT=3000" > userManager/.env
+	echo "DB_URL='mongodb://mongoDB:27017/user_manager_dev_db'" >> userManager/.env
+else
+	echo '@Configuring ENV file already exists...'
+	echo ''
+fi
+
+echo '@Building Application Image...'
+echo ''
+docker build -f Dockerfile --tag docker/usermanager .
+
+echo '@Running Application Image...'
+echo ''
+docker run --detach --link mongoDB:mongoDB --publish 3000:3000 --name userManager docker/usermanager
+
+if [ -x /usr/bin/curl ] ; then
+	read -p "Press [Enter] key to start seeding..."
+
+	echo '@Seeding...'
+	echo ''
+	curl -X POST http://localhost:3000/users -d "name=John Doe&email=john.doe@gmail.com&password=johndoe"
+	curl -X POST http://localhost:3000/users -d "name=Jane Doe&email=jane.doe@gmail.com&password=janedoe"
+
+	read -p "Press [Enter] key to open in Browser ..."
+	open http://localhost:3000/users
+fi
+
+echo '@Done ...'
+exit 0;
