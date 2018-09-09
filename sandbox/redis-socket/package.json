@@ -1,0 +1,9 @@
+{
+  "name": "redis-socket",
+  "main": "app.js",
+  "dependencies": {
+    "redis": "^2.6.0-1",
+    "socket.io": "^1.4.5"
+  },
+  "author": "Akinjide Bankole"
+}

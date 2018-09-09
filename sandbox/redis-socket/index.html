@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Socket and Redis in Node.js</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+  <style>
+    /*
+     * General styling.
+     */
+    * { 
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body { 
+      font: 13px Helvetica, Arial;
+    }
+
+    /* 
+     * Form styling.
+     */
+    form {
+      background: #000;
+      padding: 3px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+
+    form input[type="text"] {
+      border: 0;
+      padding: 10px;
+      width: 90%;
+      margin-right: .5%;
+    }
+
+    form input[type="button"] {
+      width: 9%; 
+      background: rgb(130, 224, 255);
+      border: none;
+      padding: 10px;
+    }
+
+    /* 
+     * Content styling.
+     */
+    #content li {
+      margin: 0;
+      padding: 0;
+    }
+
+    #content li {
+      padding: 5px 10px;
+    }
+
+    #content li:nth-child(odd) {
+      background: #EEEEEE;
+    }
+  </style>
+</head>
+<body>
+  <div id="content"></div>
+  
+  <form action="" id="username">
+    <input type="text" name="usernameTxt" /> 
+    <input type="button" name="setUsername" value="Set Username" />
+  </form>
+  
+  <form action="" id="sendChat" style="display:none;">
+    <input type="text" name="chatTxt" /> 
+    <input type="button" name="sendBtn" value="Send" />
+  </form>
+<script>
+  $(function() {
+    var username = 'anonymous';
+
+    var socket = new io.connect('http://localhost:8088');
+    var content = $('#content');
+
+    $('input[name=setUsername]').click(function() {
+      if($('input[name=usernameTxt]').val() != '') {
+        username = $('input[name=usernameTxt]').val();
+        var msg = { type: 'setUsername', user: username };
+        socket.json.send(msg);
+      }
+
+      $('#username').slideUp('slow', function() {
+        $('#sendChat').slideDown('slow');
+      });
+    });
+
+    socket.on('connect', function() {
+      console.log('Connected');
+      content.html('<b>Connected!</b>');
+    });
+
+    socket.on('message', function(message) {
+      content.append('<li>' + message + '</li>' + '<br />');
+    });
+
+    socket.on('disconnect', function() {
+      console.log('disconnected');
+      content.html('<b>Disconnected!</b>');
+    });
+
+    $('input[name=sendBtn]').click(function() {
+      var msg = { type: 'chat', message: username + ' : ' +
+        $('input[name=chatTxt]').val() };
+      socket.json.send(msg);
+      $('input[name=chatTxt]').val('');
+    });
+  });
+</script>
+</body>
+</html>
