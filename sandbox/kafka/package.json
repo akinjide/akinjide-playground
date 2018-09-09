@@ -1,0 +1,12 @@
+{
+  "name": "kafka",
+  "description": "Kafka with Python as Producer and Node.js as Consumer",
+  "dependencies": {
+    "no-kafka": "^3.1.10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akinjide/kafka.git"
+  },
+  "author": "Akinjide Bankole <r@akinjide.me>"
+}
