@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>OAuth</title>
+  </head>
+  <body>
+    <nav>
+    <header>
+      <p>OAuth - Homepage</p>
+    </header>
+      <% if (user) { %>
+        <button><a href="/auth/logout">Logout</a></button>
+      <% } else { %>
+        <button><a href="/auth/login">Login</a></button>
+      <% } %>
+      <button><a href="/">Homepage</a></button>
+      <button><a href="/profile">Profile</a></button>
+    </nav>
+  </body>
+</html>
