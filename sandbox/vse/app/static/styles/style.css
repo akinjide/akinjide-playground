@@ -1,0 +1,21 @@
+.player,
+.player iframe {
+  width: 280px !important;
+  height: 180px !important;
+  padding: 10px 0 !important;
+}
+
+.preloader {
+  background-color: white;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  position: fixed;
+  z-index: 100;
+}
+
+.preloader .loader {
+  transform: translate(50%, 350%);
+  position: relative;
+}
