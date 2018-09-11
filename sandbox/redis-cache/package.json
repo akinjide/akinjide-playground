@@ -1,0 +1,9 @@
+{
+  "name": "redis-cache",
+  "author": "Akinjide Bankole",
+  "main": "app.js",
+  "dependencies": {
+    "redis": "^2.8.0",
+    "sqlite3": "^4.0.2"
+  }
+}
